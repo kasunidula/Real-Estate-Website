@@ -56,6 +56,8 @@ const App = () => {
     setFavorites([]);
   };
 
+  
+
   return (
     <Router>
       <div className="font-sans">
