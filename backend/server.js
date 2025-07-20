@@ -8,32 +8,42 @@ import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 import { createServer } from 'http';
 import socketHandler from './websockets/socketHandler.js';
-import logger from './utils/logger.js';
+import logger from './utils/logger.js'; // Ensure logger exists, otherwise fallback to console.log
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/users.js';
 import itemRoutes from './routes/items.js';
-import propertyRoutes from './routes/propertyRoutes.js'; // ✅ Added Property Routes
+import propertyRoutes from './routes/propertyRoutes.js';
 import { connectDB } from './config/db.js';
 
 dotenv.config();
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // ✅ Connect to MongoDB
-connectDB();
+(async () => {
+  try {
+    await connectDB();
+    console.log("✅ MongoDB Connected Successfully");
+  } catch (err) {
+    console.error("❌ MongoDB Connection Error:", err);
+    process.exit(1); // Exit process with failure
+  }
+})();
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
-app.use(helmet());
-app.use(compression());
-app.use(morgan('combined'));
+// ✅ Middleware
+app.use(express.json()); // Allows JSON body parsing
+app.use(express.urlencoded({ extended: true })); // Supports URL-encoded data
+app.use(cors({ origin: process.env.FRONTEND_URL || '*' })); // Allow frontend requests
+app.use(helmet()); // Security headers
+app.use(compression()); // Gzip compression for performance
+app.use(morgan('combined')); // Logs HTTP requests
 
 // ✅ Rate Limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
+  max: 100, // Limit each IP to 100 requests per window
+  message: '❌ Too many requests. Please try again later.',
 });
 app.use(limiter);
 
@@ -41,18 +51,23 @@ app.use(limiter);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/items', itemRoutes);
-app.use('/api/properties', propertyRoutes); // ✅ Added Property API Route
+app.use('/api/properties', propertyRoutes);
 
-// Root Endpoint
+// ✅ Root Endpoint
 app.get('/', (req, res) => {
-    res.send('Backend is running with advanced features');
+  res.send('🚀 Backend is running with advanced security features!');
 });
 
-// ✅ WebSockets
+// ✅ Handle Undefined Routes (404)
+app.use((req, res) => {
+  res.status(404).json({ message: "❌ Route Not Found" });
+});
+
+// ✅ WebSockets Setup
 const httpServer = createServer(app);
 const io = socketHandler(httpServer);
 
-// ✅ Start the Server
+// ✅ Start Server
 httpServer.listen(PORT, () => {
-    logger.info(`🚀 Server running on port ${PORT}`);
+  (logger ? logger.info : console.log)(`🚀 Server running on port ${PORT}`);
 });
