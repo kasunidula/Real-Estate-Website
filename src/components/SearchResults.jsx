@@ -1,40 +1,43 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-const SearchResults = ({ properties, onViewDetails }) => {
-  // This component displays the search results as a list of property cards.
+const SearchResults = ({ properties }) => {
   return (
-    <div className="results">
-      {properties.map((property) => (
-        // Loop through the properties array and create a card for each property.
-        <div key={property.id} className="property-card">
-          {/* Property Image */}
-          <img 
-            src={property.image} // Display the image of the property.
-            alt={property.title} // Alt text for accessibility.
-            className="w-full h-48 object-cover" // Style the image to fit the card.
-          />
+    <div className="container mx-auto py-8 px-6">
+      <h1 className="text-3xl font-bold mb-4 text-center">Search Results</h1>
 
-        
-          <h3 className="text-lg font-semibold">{property.title}</h3>
-          
-          <p>£{property.price}</p>
-       
-          <p>{property.bedrooms} Bedrooms</p>
-          
-          <p>{property.postcode}</p>
+      {properties.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {properties.map((property) => (
+            <div key={property._id} className="bg-white shadow-md rounded-xl overflow-hidden">
+              {/* Property Image */}
+              <img src={property.image} alt={property.title} className="w-full h-64 object-cover" />
 
-          {/* Button to View More Details */}
-          <button
-            onClick={() => onViewDetails(property.id)} 
-            // Call the function to view details of the specific property.
-            className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
-          >
-            View Details
-          </button>
+              <div className="p-6">
+                {/* Property Details */}
+                <h3 className="text-lg font-semibold mb-2">{property.title}</h3>
+                <p className="text-gray-600 mb-1">£{property.price}</p>
+                <p className="text-gray-600 mb-1">{property.bedrooms} Bedrooms</p>
+                <p className="text-gray-600">{property.location}</p>
+
+                {/* Buttons */}
+                <div className="flex flex-col sm:flex-row justify-between gap-4 mt-4">
+                  <Link
+                    to={`/property/${property._id}`}
+                    className="bg-green-500 text-white text-center px-4 py-2 rounded hover:bg-green-600 transition"
+                  >
+                    View Details
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+      ) : (
+        <p className="text-center text-gray-600">No properties match your search criteria.</p>
+      )}
     </div>
   );
 };
 
-export default SearchResults; // Export the SearchResults component for use in other parts of the app.
+export default SearchResults;
