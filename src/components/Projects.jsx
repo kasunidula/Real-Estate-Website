@@ -30,21 +30,21 @@ const Properties = ({ properties, onAddToFavorites, handleDragStart }) => {
               <p className="text-blue-500 font-semibold">£{property.price}</p>
             </div>
 
-            {/* Buttons */}
-            <div className="flex flex-col sm:flex-row justify-between gap-2 mt-auto pt-4">
-              <button
-                onClick={() => onAddToFavorites(property)}
-                className="bg-blue-900 text-white px-4 py-2 rounded-2xl hover:bg-blue-300 transition"
-              >
-                Add to Favorites
-              </button>
-              <Link
-                to={`/property/${property._id}`}
-                className="bg-blue-900 text-white px-4 py-2 rounded-2xl hover:bg-green-600 transition text-center"
-              >
-                More Info
-              </Link>
-            </div>
+          <div className="flex flex-col sm:flex-row sm:justify-between gap-3 mt-auto pt-4 w-full">
+            <button
+              onClick={() => onAddToFavorites(property)}
+              className="w-full sm:w-auto bg-blue-900 text-white px-4 py-2 rounded-2xl hover:bg-blue-300 transition text-center"
+            >
+              Add to Favorites
+            </button>
+            <Link
+              to={`/property/${property._id}`}
+              className="w-full sm:w-auto bg-blue-900 text-white px-4 py-2 rounded-2xl hover:bg-green-600 transition text-center"
+            >
+              More Info
+            </Link>
+          </div>
+
           </div>
         ))}
       </div>

@@ -5,7 +5,7 @@ import axios from 'axios';
 import Header from './components/Header';
 import SearchForm from './components/SearchForm';
 import Properties from './components/Projects';
-import Favorites from './components/Favorites';
+import Favorites from './components/favorites';
 import PropertyDetails from './components/PropertyDetails';
 
 const App = () => {
