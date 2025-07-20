@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Combobox, NumberPicker, DatePicker } from 'react-widgets'; // Import form components.
-import 'react-widgets/styles.css'; // Import default styles for these widgets.
+import { Combobox, NumberPicker, DatePicker } from 'react-widgets';
+import 'react-widgets/styles.css';
 
 const SearchForm = ({ onSearch }) => {
   // State to store search criteria
@@ -84,118 +84,161 @@ const SearchForm = ({ onSearch }) => {
   };
 
   const propertyTypes = ['Any', 'House', 'Flat']; // Property types to choose from.
+  const postcodes = ['BR5', 'BR6', 'E14', 'SE1', 'SW1', 'W1', 'E2'];
 
   return (
     <form
-      onSubmit={handleSubmit} // Handle the form submission.
-      className="bg-white p-7 w-full max-w-xlg mx-auto rounded-lg shadow-lg flex flex-col gap-2"
+      onSubmit={handleSubmit}
+      className="bg-white/90 backdrop-blur-lg p-8 w-full  max-w-3xl mx-auto rounded-3xl shadow-2xl border border-navy-100 transform transition-all duration-300 hover:shadow-3xl"
     >
-      <h2 className="text-center text-3xl font-bold mb-4">Search Property</h2>
+      <h2 className="text-center text-4xl font-['Playfair_Display'] font-bold mb-6 text-navy-900 tracking-wide">
+        Discover Your Dream Property
+      </h2>
 
-      {/* Display error message if validation fails */}
-      {error && <div className="text-red-500 text-sm mb-2">{error}</div>}
+      {/* Error Message */}
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-4 text-center">
+          {error}
+        </div>
+      )}
 
-      {/* Dropdown for selecting property type */}
-      <div>
-        <label className="block text-sm font-medium text-gray-600">Type:</label>
+      {/* Property Type */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-navy-700 mb-2">
+          Property Type
+        </label>
         <Combobox
           data={propertyTypes}
           value={criteria.type}
           onChange={(value) => handleChange('type', value)}
-          className="mt-1 block w-full rounded-md shadow-sm"
+          className="w-full rounded-xl border-navy-300 focus:ring-2 focus:ring-gold-500 transition-all duration-300"
         />
       </div>
 
-      {/* Date picker for selecting "date added" */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Date Added:</label>
-        <DatePicker
-          value={criteria.added}
-          onChange={(value) => handleChange('added', value)}
-          placeholder="Select a date"
-          className="mt-1 block w-full rounded-md shadow-sm"
-        />
-      </div>
-
-      {/* Input fields for minimum and maximum price */}
-      <div className="flex flex-wrap gap-4">
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-600">Min Price:</label>
+      {/* Price Range */}
+      <div className="grid md:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label className="block text-sm font-medium text-navy-700 mb-2">
+            Minimum Price
+          </label>
           <NumberPicker
             value={criteria.minPrice}
             onChange={(value) => handleChange('minPrice', value)}
-            placeholder="Enter minimum price"
+            placeholder="Min Price"
             min={0}
-            className="mt-1 block w-full rounded-md shadow-sm"
+            className="w-full rounded-xl border-navy-300 focus:ring-2 focus:ring-gold-500 transition-all duration-300"
           />
         </div>
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700">Max Price:</label>
+        <div>
+          <label className="block text-sm font-medium text-navy-700 mb-2">
+            Maximum Price
+          </label>
           <NumberPicker
             value={criteria.maxPrice}
             onChange={(value) => handleChange('maxPrice', value)}
-            placeholder="Enter maximum price"
+            placeholder="Max Price"
             min={0}
-            className="mt-1 block w-full rounded-md shadow-sm"
+            className="w-full rounded-xl border-navy-300 focus:ring-2 focus:ring-gold-500 transition-all duration-300"
           />
         </div>
       </div>
 
-      {/* Input fields for minimum and maximum bedrooms */}
-      <div className="flex flex-wrap gap-4">
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700">Min Bedrooms:</label>
+      {/* Bedrooms Range */}
+      <div className="grid md:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label className="block text-sm font-medium text-navy-700 mb-2">
+            Minimum Bedrooms
+          </label>
           <NumberPicker
             value={criteria.minBedrooms}
             onChange={(value) => handleChange('minBedrooms', value)}
-            placeholder="Enter minimum bedrooms"
+            placeholder="Min Bedrooms"
             min={0}
-            className="mt-1 block w-full rounded-md shadow-sm"
+            className="w-full rounded-xl border-navy-300 focus:ring-2 focus:ring-gold-500 transition-all duration-300"
           />
         </div>
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700">Max Bedrooms:</label>
+        <div>
+          <label className="block text-sm font-medium text-navy-700 mb-2">
+            Maximum Bedrooms
+          </label>
           <NumberPicker
             value={criteria.maxBedrooms}
             onChange={(value) => handleChange('maxBedrooms', value)}
-            placeholder="Enter maximum bedrooms"
+            placeholder="Max Bedrooms"
             min={0}
-            className="mt-1 block w-full rounded-md shadow-sm"
+            className="w-full rounded-xl border-navy-300 focus:ring-2 focus:ring-gold-500 transition-all duration-300"
           />
         </div>
       </div>
 
-      {/* Dropdown for selecting postcode */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700">Postcode:</label>
-        <Combobox
-          data={['BR5', 'BR6', 'E14', 'SE1', 'SW1', 'W1', 'E2']} // Available postcodes.
-          value={criteria.postcode}
-          onChange={(value) => handleChange('postcode', value)}
-          placeholder="Enter postcode (e.g., NW1)"
-          className="mt-1 block w-full rounded-md shadow-sm"
+           {/* Property Size */}
+           <div className="mb-4">
+        <label className="block text-sm font-medium text-navy-700 mb-2">
+          Property Size (sq ft)
+        </label>
+        <NumberPicker
+          value={criteria.size}
+          onChange={(value) => handleChange('size', value)}
+          placeholder="Size (sq ft)"
+          min={0}
+          className="w-full rounded-md border-gray-300 shadow-sm"
         />
       </div>
 
-      {/* Buttons for "Search" and "Favorites" */}
-      <div className="flex gap-2">
+      {/* Date Added and Postcode */}
+      <div className="grid md:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label className="block text-sm font-medium text-navy-700 mb-2">
+            Date Added
+          </label>
+          <DatePicker
+            value={criteria.added}
+            onChange={(value) => handleChange('added', value)}
+            placeholder="Select Date"
+            className="w-full rounded-xl border-navy-300 focus:ring-2 focus:ring-gold-500 transition-all duration-300"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-navy-700 mb-2">
+            Postcode
+          </label>
+          <Combobox
+            data={postcodes}
+            value={criteria.postcode}
+            onChange={(value) => handleChange('postcode', value)}
+            placeholder="Enter Postcode"
+            className="w-full rounded-xl border-navy-300 focus:ring-2 focus:ring-gold-500 transition-all duration-300"
+          />
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex space-x-4 mt-6">
         <button
           type="submit"
-          className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-500 transition flex-1"
+          className="flex-1 bg-blue-100 text-navy-900 py-3 rounded-full 
+          hover:bg-gold-600 transition-all duration-300 
+          transform hover:scale-105 font-semibold 
+          flex items-center justify-center space-x-2 
+          shadow-md hover:shadow-lg"
         >
-          Search
+          <span>Search Properties</span>
         </button>
+        
         <button
           type="button"
-          onClick={handleScrollToFavorites} 
-          // Scroll to the favorites section when clicked.
-          className="bg-green-500 text-white py-2 px-3 rounded-md hover:bg-green-600 transition flex-shrink"
+          onClick={handleScrollToFavorites}
+          className="flex-1 bg-blue-100 text-navy-900 py-3 rounded-full 
+          hover:bg-gold-600 transition-all duration-300 
+          transform hover:scale-105 font-semibold 
+          flex items-center justify-center space-x-2 
+          shadow-md hover:shadow-lg"
         >
-          Favorites
+          <span>View Favorites</span>
         </button>
       </div>
     </form>
   );
 };
 
-export default SearchForm; // Export the SearchForm component for use in other parts of the app.
+export default SearchForm;
