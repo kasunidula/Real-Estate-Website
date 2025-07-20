@@ -1,118 +1,118 @@
-import React from 'react';
-import { useParams } from 'react-router-dom'; // Hook to access route parameters.
-import propertiesData from '../properties.json'; // Import property data from a JSON file.
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'; // Import Tabs components for tabbed content.
-import 'react-tabs/style/react-tabs.css'; // Import default styles for tabs.
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
 const PropertyDetails = ({ onAddToFavorites }) => {
-  const { id } = useParams(); // Get the property ID from the route.
-  const property = propertiesData.find((p) => p.id === parseInt(id)); 
-  // Find the property with the matching ID.
+  const { id } = useParams();
+  const [property, setProperty] = useState(null);
+
+  // ✅ Fetch Property Details from API
+  useEffect(() => {
+    fetch(`http://localhost:5000/api/properties/${id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("✅ Property Details:", data); // Debugging log
+        setProperty(data);
+      })
+      .catch((error) => console.error("❌ Error fetching property details:", error));
+  }, [id]);
 
   if (!property) {
-    // Show this message if the property is not found.
     return <div className="text-center py-20">Property not found.</div>;
   }
 
   return (
     <div className="container mx-auto py-8 px-6">
-      {/* Property Title */}
       <h1 className="text-3xl font-bold mb-4">{property.title}</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Main Image */}
-        <img
-          src={property.image} // Main property image.
-          alt={property.title} // Image description for accessibility.
-          className="w-full h-96 object-cover rounded-lg"
-        />
+        {/* Main Property Image */}
+        <img src={property.image} alt={property.title} className="w-full h-96 object-cover rounded-lg" />
 
-        {/* Property Info Section */}
+        {/* Property Info */}
         <div className="space-y-4">
-          {/* Price and Description */}
-          <h2 className="text-xl font-semibold text-blue-600">£{property.price}</h2>
+          <h2 className="text-2xl font-semibold text-blue-600">£{property.price}</h2>
           <p className="text-gray-700">{property.shortDescription}</p>
-          {/* List of Property Details */}
           <ul>
             <li>Type: {property.type}</li>
             <li>Bedrooms: {property.bedrooms}</li>
             <li>Postcode: {property.postcode}</li>
-            <li>Date Added: {property.added}</li>
+            <li>Date Added: {new Date(property.added).toLocaleDateString()}</li>
           </ul>
-          {/* Buttons */}
-          <div className="flex gap-4 mt-4">
-            <button
-              onClick={() => onAddToFavorites(property)} 
-              // Adds the property to favorites.
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-            >
-              Add to Favorites
-            </button>
-            <button
-              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
-            >
-              Buy Now
-            </button>
-          </div>
+          <button
+            onClick={() => onAddToFavorites(property)}
+            className="bg-amber-400 text-white px-6 py-2 rounded-2xl hover:bg-orange-500 transition"
+            style={{ width: '200px' }}
+          >
+            Add to Favorites
+          </button>
         </div>
       </div>
 
       {/* Tabs Section */}
-      <Tabs className="mt-8">
+      <Tabs className="mt-10">
         <TabList>
-          <Tab>Images</Tab> 
-          <Tab>Long Description</Tab> 
-          <Tab>Floor Plan</Tab> 
-          <Tab>Google Map</Tab> 
+          <Tab>Images</Tab>
+          <Tab>Long Description</Tab>
+          <Tab>Floor Plan</Tab>
+          <Tab>Google Map</Tab>
         </TabList>
 
-        {/* Images Tab Content */}
+        {/* ✅ Images Tab */}
         <TabPanel>
           <div className="grid grid-cols-2 gap-4 mt-4">
-            {property.images.map((img, index) => (
-              <img
-                key={index} // Assign a unique key to each image.
-                src={img} // Display property images.
-                alt={`Property ${index + 1}`} // Image description for accessibility.
-                className="w-50 h-50 object-cover rounded-lg"
-              />
-            ))}
+            {property.images && property.images.length > 0 ? (
+              property.images.map((img, index) => (
+                <img
+                  key={index}
+                  src={img}
+                  alt={`Property ${index + 1}`}
+                  className="w-full h-64 object-cover rounded-lg"
+                />
+              ))
+            ) : (
+              <p>No images available.</p>
+            )}
           </div>
         </TabPanel>
 
-        {/* Long Description Tab Content */}
+        {/* ✅ Long Description Tab */}
         <TabPanel>
           <div className="mt-4">
             <h3 className="text-2xl font-bold mb-4">Long Description</h3>
-            <p className="text-gray-700">{property.longDescription}</p> 
-            {/* Detailed description of the property. */}
+            <p className="text-gray-700">{property.longDescription || "No description available."}</p>
           </div>
         </TabPanel>
 
-        {/* Floor Plan Tab Content */}
+        {/* ✅ Floor Plan Tab */}
         <TabPanel>
-          <img
-            src={property.floorPlan} // Floor plan image.
-            alt="Floor Plan" // Image description for accessibility.
-            className="w-full h-96 object-contain rounded-lg"
-          />
+          {property.floorPlan ? (
+            <img src={property.floorPlan} alt="Floor Plan" className="w-full h-96 object-contain rounded-lg" />
+          ) : (
+            <p>No floor plan available.</p>
+          )}
         </TabPanel>
 
-        {/* Google Map Tab Content */}
+        {/* ✅ Google Map Tab */}
         <TabPanel>
-          <iframe
-            src={property.googleMap} // Embed Google Map for the property's location.
-            title="googleMap" // Title for accessibility.
-            width="100%"
-            height="400"
-            frameBorder="0"
-            allowFullScreen="" 
-            className="rounded-lg"
-          ></iframe>
+          {property.googleMap ? (
+            <iframe
+              src={property.googleMap}
+              title="Google Map"
+              width="100%"
+              height="400"
+              frameBorder="0"
+              allowFullScreen=""
+              className="rounded-lg"
+            ></iframe>
+          ) : (
+            <p>No Google Map available.</p>
+          )}
         </TabPanel>
       </Tabs>
     </div>
   );
 };
 
-export default PropertyDetails; // Export the PropertyDetails component for use in other parts of the app.
+export default PropertyDetails;
