@@ -1,5 +1,5 @@
 import React from 'react';
-import Navbar from './Navbar'; // Import the Navbar component.
+import Navbar from './Navbar';
 
 const Header = () => { 
   return (
@@ -17,13 +17,14 @@ const Header = () => {
           Explore homes that fit your dreams
         </h1>
 
-        {/* Buttons Section */}
+        {/* Glass Buttons (No Bold Font) */}
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 mt-12">
           <a
             href="#Projects"
-            className="flex-1 bg-[#1D3557] text-white px-8 py-3 rounded-xl
-            hover:bg-[#2C3E66] transition-all duration-300 
-            transform hover:scale-105 font-semibold 
+            className="flex-1 text-white px-8 py-3 rounded-2xl bg-blue-200/40 
+            backdrop-blur-md border border-white/30 
+            hover:bg-blue-300/50 transition-all duration-300 
+            transform hover:scale-105 
             flex items-center justify-center 
             shadow-md hover:shadow-lg"
           >
@@ -31,9 +32,10 @@ const Header = () => {
           </a>
           <a
             href="#Contact"
-            className="flex-1 bg-[#1D3557] text-white px-8 py-3 rounded-xl
-            hover:bg-[#2C3E66] transition-all duration-300 
-            transform hover:scale-105 font-semibold 
+            className="flex-1 text-white px-8 py-3 rounded-2xl bg-blue-200/40 
+            backdrop-blur-md border border-white/30 
+            hover:bg-blue-300/50 transition-all duration-300 
+            transform hover:scale-105 
             flex items-center justify-center 
             shadow-md hover:shadow-lg"
           >
