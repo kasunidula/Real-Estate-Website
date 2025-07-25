@@ -53,9 +53,10 @@ app.use('/api/users', userRoutes);
 app.use('/api/items', itemRoutes);
 app.use('/api/properties', propertyRoutes);
 
-// ✅ Root Endpoint
+
+// ✅ Health Check
 app.get('/', (req, res) => {
-  res.send('🚀 Backend is running with advanced security features!');
+  res.send('🚀 Backend is running with MongoDB Atlas and production-ready config!');
 });
 
 // ✅ Handle Undefined Routes (404)
@@ -65,9 +66,9 @@ app.use((req, res) => {
 
 // ✅ WebSockets Setup
 const httpServer = createServer(app);
-const io = socketHandler(httpServer);
+socketHandler(httpServer); // Initialize WebSocket handling
 
 // ✅ Start Server
 httpServer.listen(PORT, () => {
-  (logger ? logger.info : console.log)(`🚀 Server running on port ${PORT}`);
+  (logger?.info || console.log)(`🚀 Server running on port ${PORT}`);
 });
