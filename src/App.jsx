@@ -11,7 +11,17 @@ import PropertyDetails from './components/PropertyDetails';
 const App = () => {
   const [properties, setProperties] = useState([]);
   const [filteredProperties, setFilteredProperties] = useState([]);
-  const [favorites, setFavorites] = useState([]);
+
+  // ✅ Load favorites from localStorage
+  const [favorites, setFavorites] = useState(() => {
+    const saved = localStorage.getItem('favorites');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  // ✅ Save favorites to localStorage on change
+  useEffect(() => {
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+  }, [favorites]);
 
   useEffect(() => {
     fetchProperties();
@@ -82,7 +92,7 @@ const App = () => {
         <Header />
 
         {/* ✅ Add spacing between the Header and Search Form */}
-        <div className="mt-12"> 
+        <div className="mt-12">
           <SearchForm onSearch={handleSearch} />
         </div>
 
@@ -116,7 +126,10 @@ const App = () => {
               </div>
             }
           />
-          <Route path="/property/:id" element={<PropertyDetails onAddToFavorites={handleAddToFavorites} />} />
+          <Route
+            path="/property/:id"
+            element={<PropertyDetails onAddToFavorites={handleAddToFavorites} />}
+          />
         </Routes>
       </div>
     </Router>
